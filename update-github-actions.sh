@@ -1,18 +1,12 @@
 #!/bin/bash
-set -e
-ls
 WF_DIR='./.github/workflows'
 WF_TYPE=$1
+HOOK_DIR=$(dirname $0)
 [[ ! -e ${WF_DIR} ]] && mkdir -p ${WF_DIR}
-cd ${WF_DIR}
-curl https://github.com/SineQuaNon/workfows/$WF_TYPE.yml > $WF_TYPE.yml.tmp
-DIFF_RET=$(diff -q $WF_TYPE.yml $WF_TYPE.yml.tmp)
-if [[ ${DIFF_RET} -ne 0]]
+diff -q ${HOOK_DIR}/${WF_TYPE}.yml ${WF_DIR}/${WF_TYPE}.yml
+DIFFRET=$?
+if [[ ${DIFFRET} -ne 0 ]]
 then
-    mv -f ${WF_TYPE}.yml.tmp ${WF_TYPE}.yml
-else
-    rm -f ${WF_TYPE}.yml.tmp
+    cp -f ${HOOK_DIR}/${WF_TYPE}.yml ${WF_DIR}/${WF_TYPE}.yml
 fi
-return $DIFF_RET
-
-
+exit ${DIFFRET}
