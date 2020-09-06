@@ -1,4 +1,4 @@
-name: Raisl CI
+name: Rails CI
 on: [push, pull_request]
 
 jobs:
