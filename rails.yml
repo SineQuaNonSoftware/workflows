@@ -1,31 +1,31 @@
+---
 name: Rails CI
 on: [push, pull_request]
-
 jobs:
-  build:
-    name: Build dependencies
-    runs-on: ubuntu-latest
-    env:
-      PUPPET_GEM_VERSION: '~> 5'
-    steps:
-    - uses: actions/checkout@v2
-    - uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: 2.7.1
-        bundler-cache: true
-    - name: Display the versions used
-      run: ruby --version && echo -n 'gem ' && gem --version && bundle --version
-    - name: Setup DB
-      run: |
-        bundle exec rails db:migrate     # Check our migrations are solid
-        bundle exec rails db:seed_fu     # Check our migrations are syntaxically correct
-        bundle exec rake db:test:prepare # Prepare the actual DB that will be used for tests
-    - name: Security Audits
-      run: |
-        bundle exec bundler-audit check --update
-        bundle exec rubocop --require rubocop-gitlab-security
-        bundle exec brakeman --ignore-model-output
-    - name: Dependencies Licences validation
-      run: bundle exec license_finder
-    - name: Test Suite
-      run: bundle exec rspec
+    build:
+        name: Build dependencies
+        runs-on: ubuntu-latest
+        env:
+            PUPPET_GEM_VERSION: ~> 5
+            steps:
+                - uses: actions/checkout@v2
+                - uses: ruby/setup-ruby@v1
+                  with:
+                      ruby-version: 2.7.1
+                      bundler-cache: true
+                - name: Display the versions used
+                  run: ruby --version && echo -n 'gem ' && gem --version && bundle --version
+                - name: Setup DB
+                  run: |
+                      bundle exec rails db:migrate     # Check our migrations are solid
+                      bundle exec rails db:seed_fu     # Check our migrations are syntaxically correct
+                      bundle exec rake db:test:prepare # Prepare the actual DB that will be used for tests
+                - name: Security Audits
+                  run: |
+                      bundle exec bundler-audit check --update
+                      bundle exec rubocop --require rubocop-gitlab-security
+                      bundle exec brakeman --ignore-model-output
+                - name: Dependencies Licences validation
+                  run: bundle exec license_finder
+                - name: Test Suite
+                  run: bundle exec rspec
