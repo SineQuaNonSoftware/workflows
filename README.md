@@ -31,6 +31,11 @@ puppet-forge-github-actions
 rails-github-actions
 ```
 
+## Updating hooks
+```
+pre-commit autoupdate
+```
+
 ## Installing the hooks for an already hooked repo
 Install all the hooks
 ```
