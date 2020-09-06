@@ -1,0 +1,20 @@
+-   id: terraform-github-actions
+    name: update Terraform GitHub Actions
+    description: This hook trims gets the latest version of our CI GitHub actions for this repo type
+    entry: ./update-github-actions.sh terraform
+    language: script
+-   id: puppet-forge-github-actions
+    name: update puppet-forge GitHub Actions
+    description: This hook trims gets the latest version of our CI GitHub actions for this repo type
+    entry: ./update-github-actions.sh puppet-forge
+    language: script
+-   id: puppet-github-actions
+    name: update puppet GitHub Actions
+    description: This hook trims gets the latest version of our CI GitHub actions for this repo type
+    entry: ./update-github-actions.sh puppet
+    language: script
+-   id: rails-github-actions
+    name: update rails GitHub Actions
+    description: This hook trims gets the latest version of our CI GitHub actions for this repo type
+    entry: ./update-github-actions.sh rails
+    language: script
