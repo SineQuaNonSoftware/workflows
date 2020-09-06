@@ -46,3 +46,9 @@ pre-commit install
 [List of available hooks](https://pre-commit.com/hooks.html)
 [Adding existing hooks](https://pre-commit.com/#plugins)
 [Hook creation](https://pre-commit.com/#new-hooks)
+
+## Running hooks
+```
+pre-commit run --all-files # Runs all configured hooks on all files
+pre-commit run --all-files terraform-github-actions # Run this particular hook on all files
+```
