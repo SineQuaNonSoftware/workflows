@@ -1,0 +1,59 @@
+name: Validation for puppet 5 and 6
+on: [push, pull_request]
+
+jobs:
+  parser_validate_puppet6:
+    name: Validation for Puppet 6
+    runs-on: ubuntu-latest
+    container: puppet/puppetserver
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Get Puppet version for this run
+        run: puppet --version
+      - name: Puppet files syntax check
+        run: for file in $(find . -name '*.pp'); do echo $file; puppet parser validate $file || exit 1; done
+      - name: Puppetfile syntax check
+        run: r10k puppetfile check
+      - name: YAML files syntax check
+        run: for file in $(find . -name "*.yaml"); do echo $file; ruby -e "require 'yaml'; YAML.parse(File.open('$file'))" 2>&1 || exit 1; done
+      - name: EYAML files syntax check
+        run: for file in $(find . -name "*.eyaml"); do echo $file; ruby -e "require 'yaml'; YAML.parse(File.open('$file'))" 2>&1 || exit 1; done
+      - name: ERB files syntax check
+        run: for file in $(find . -name "*.erb"); do echo $file; erb -P -x -T - "${file}" || exit 1; done
+      - name: Shell scripts syntax check
+        run: for file in $(find . -name "*.sh"); do echo $file; bash -n $file || exit 1; done
+      - name: Check for non-printable characters
+        run: grep -I -H -P -n "[\xa0]" --color=yes -r * || tr '\302\102' 'X'
+      - name: Install puppet-lint
+        run: gem install puppet-lint
+      - name: Puppet lint; only clean code in our Org ;-)
+        run: ret=0; for file in $(find . -name '*.pp'); do echo $file; puppet-lint --fail-on-warnings --no-140chars-check $file || ret=1; done; echo $ret; exit $ret
+
+  parser_validate_puppet5:
+    name: Validation for Puppet 5
+    runs-on: ubuntu-latest
+    container: puppet/puppetserver:5.3.6
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Get Puppet version for this run
+        run: puppet --version
+      - name: Puppet files syntax check
+        run: for file in $(find . -name '*.pp'); do echo $file; puppet parser validate $file || exit 1; done
+      - name: Puppetfile syntax check
+        run: r10k puppetfile check
+      - name: YAML files syntax check
+        run: for file in $(find . -name "*.yaml"); do echo $file; ruby -e "require 'yaml'; YAML.parse(File.open('$file'))" 2>&1 || exit 1; done
+      - name: EYAML files syntax check
+        run: for file in $(find . -name "*.eyaml"); do echo $file; ruby -e "require 'yaml'; YAML.parse(File.open('$file'))" 2>&1 || exit 1; done
+      - name: ERB files syntax check
+        run: for file in $(find . -name "*.erb"); do echo $file; erb -P -x -T - "${file}" || exit 1; done
+      - name: Shell scripts syntax check
+        run: for file in $(find . -name "*.sh"); do echo $file; bash -n $file || exit 1; done
+      - name: Check for non-printable characters
+        run: grep -I -H -P -n "[\xa0]" --color=yes -r * || tr '\302\102' 'X'
+      - name: Install puppet-lint
+        run: gem install puppet-lint
+      - name: Puppet lint; only clean code in our Org ;-)
+        run: ret=0; for file in $(find . -name '*.pp'); do echo $file; puppet-lint --fail-on-warnings --no-140chars-check $file || ret=1; done; echo $ret; exit $ret
