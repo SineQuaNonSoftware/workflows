@@ -25,7 +25,7 @@ jobs:
         bundle exec brakeman --ignore-model-output
     - name: Detect code smells
       run: reek
-      continue_on_error: true
+      continue-on-error: true
     - name: Dependencies Licences validation
       run: bundle exec license_finder
     - name: Test Suite
