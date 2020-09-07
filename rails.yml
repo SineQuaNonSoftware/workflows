@@ -24,7 +24,7 @@ jobs:
         bundle exec rubocop --require rubocop-gitlab-security
         bundle exec brakeman --ignore-model-output
     - name: Detect code smells
-      run: reek
+      run: bundle exec reek
       continue-on-error: true
     - name: Dependencies Licences validation
       run: bundle exec license_finder
