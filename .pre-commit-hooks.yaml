@@ -19,3 +19,8 @@
       description: This hook trims gets the latest version of our CI GitHub actions for this repo type
       entry: ./update-github-actions.sh rails
       language: script
+    - id: license-finder
+      name: run license_finder
+      description: This hook runs bundle_exec license-finder
+      entry: ./license-finder.sh
+      language: script
